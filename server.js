@@ -14,7 +14,7 @@ const xss = require("xss-clean");
 require("dotenv").config();
 
 
-const connection = require("./config/database");
+const db = require("./config/database");
 
 const MongoStore = require("connect-mongo");
 
@@ -102,7 +102,11 @@ app.use(
 
 // Starts listening to the opened port
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
-    console.log("Server running on", port);
-});
+db.connect()
+    .then(() => {
+        app.listen(port, () => {
+            console.log("Server running on", port);
+        });
+})
 
+module.exports = app;
