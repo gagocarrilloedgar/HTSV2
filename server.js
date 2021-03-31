@@ -1,20 +1,20 @@
 /**
  * ------------------ IMPORTS -----------------------
 */
+require("./config/database");
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors")
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-const router = require("./routes/router");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
-require("dotenv").config();
-
-
-const db = require("./config/database");
+const router = require("./routes/router");
+const notFound = require("./middlewares/notFound")
+const handleErrors = require("./middlewares/handleErrors");
 
 const MongoStore = require("connect-mongo");
 
@@ -53,7 +53,6 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-
 
 // Set security-related HTTP response headers
 app.use(helmet());
@@ -100,13 +99,22 @@ app.use(
     })
 );
 
+// Import and addition of all the different API routes
+app.use("/", router);
+
+app.use(notFound);
+app.use(handleErrors);
+
+
+// --------------------- SERVER -------------------------
+
+
 // Starts listening to the opened port
 const port = process.env.PORT || 5000;
-db.connect()
-    .then(() => {
-        app.listen(port, () => {
-            console.log("Server running on", port);
-        });
-})
 
-module.exports = app;
+const server = app.listen(port, () => {
+    console.log("Server running on", port);
+});
+
+
+module.exports = { app, server };

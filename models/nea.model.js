@@ -11,6 +11,6 @@ const NeaSchema = new Schema({
     ma: { type: Number, required: true },
 })
 
-const Nea = mongoose.model("Nea", NEASchema);
+const Nea = mongoose.model("Nea", NeaSchema);
 
 module.exports = Nea;

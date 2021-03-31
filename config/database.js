@@ -1,67 +1,73 @@
 
-
 const mongoose = require("mongoose");
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
+const mongod = new MongoMemoryServer();
 // Accessing environmental variobles
 require("dotenv").config();
 
 
-// Loading the mongo db uri to a constat for easier access
-const connectionString = process.env.ATLAS_URI;
+// Mongoose object conection opstions
+const connectionOptions = {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+}
+
+/**
+ * Connect to the in-memory database.
+ */
+exports.connect = async () => {
+    const uri = await mongod.getUri();
 
 
-// Connection function with mocking check 
+    await mongoose.connect(uri, connectionOptions);
+}
 
-const connect = () => {
-    // Mongoose object conection opstions
-    const connectionOptions = {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
+/**
+ * Drop database, close the connection and stop mongod.
+ */
+
+exports.closeDatabase = async () => {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongod.stop();
+}
+
+/**
+ * Remove all the data for all db collections.
+ */
+exports.clearDatabase = async () => {
+    const collections = mongoose.connection.collections;
+
+    for (const key in collections) {
+        const collection = collections[key];
+        await collection.deleteMany();
     }
-
-    return new Promise((resolve, reject) => {
-
-        // If testing we will mock the database
-        if (process.env.NODE_ENV === 'test') {
-            const Mockgoose = require('mockgoose').Mockgoose;
-            const mockgoose = new Mockgoose(mongoose);
-            mockgoose.prepareStorage()
-                .then(() => mongoose
-                    .connect(connectionString, connectionOptions)
-                    .then((res, err) => {
-                        if (err) return reject(err);
-                        console.log("Connected to mocked DB");
-                        resolve();
-                    })
-                )
-
-        } else {
-            mongoose
-                .connect(connectionString, connectionOptions)
-                .then((res, err) => {
-                    if (err) return reject(err);
-                    console.log("Running on real DB mode");
-                    resolve();
-                })
-        }
-    });
 }
 
 
+const resp = process.env.NODE_ENV === "test"
+    ? 1
+    : 0;
 
-function close() {
-    return mongoose.disconnect();
+if (resp) {
+    console.log("Using testing environment");
+} else {
+
+    // Loading the mongo db uri to a constat for easier access
+    const connectionString = process.env.ATLAS_URI;
+
+    mongoose
+        .connect(connectionString, connectionOptions)
+        .then(() => console.log("Connection stabilished successfully"))
+        .catch(err => console.log(err))
+
 }
 
-
-//Mongoose connection main function 
-const mongooseConection = ({ resolve, reject }) => {
+exports.close = () => mongoose.disconnect();
 
 
 
-}
 
-
-
-module.exports = { close, connect };
