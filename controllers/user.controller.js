@@ -1,62 +1,21 @@
 const User = require("../models/user.model");
-const catchAsync = require("../helpers/catchAsync");
+const crud = require("./crud.controller")
+require("dotenv").config();
 
+// Common Crud + some more standar database actions
+exports.findAll = crud.findAll(User);
 
-/**
- * Returns all the users inside the DB
- * @param {*} req --> request body object
- * @param {*} res --> response body object
- */
-exports.findAll = catchAsync(async (req, res, next) => {
+exports.find = crud.find(User);
 
-    const users = await User.find();
-    res.status(200).json(users);
+exports.add = crud.add(User);
 
-});
+exports.addList = crud.addList(User)
 
+exports.update = crud.update(User)
 
-exports.find = catchAsync(async (req, res, next) => {
+exports.delete = crud.delete(User)
 
-    const user = await User.findById(req.params.id);
-    res.status(200).json(user);
+// ----------- Custom routes such --------
 
-});
-
-
-exports.add = catchAsync(async (req, res) => {
-
-    const user = await User.create(req.body);
-    res.status(200).json(user);
-
-});
-
-
-exports.addList = catchAsync(async (req, res, next) => {
-
-    const users = await User.insertMany(req.body)
-    res.status(200).json(users);
-
-});
-
-
-exports.update = catchAsync(async (req, res) => {
-
-    const user = await User.findByIdAndUpdate(req.params.id, {}, req.body)
-    res.status(200).json(user);
-
-});
-
-
-exports.delete = catchAsync(async (req, res) => {
-
-
-
-});
-
-exports.purge = catchAsync(async (req, res) => {
-
-
-
-});
 
 

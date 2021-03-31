@@ -2,11 +2,9 @@
 const { api } = require("./helpers")
 require("./jest.config");
 
-/**
- * Testing add users
-*/
 
-describe("/GET /api/users", () => {
+
+describe("/GET /api/neas", () => {
 
     test('Nea are returned as json', async () => {
 
@@ -27,6 +25,8 @@ describe("/GET /api/users", () => {
 
 
 });
+
+
 
 
 

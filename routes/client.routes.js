@@ -1,18 +1,18 @@
 let router = require("express").Router();
-const controller = require("../controllers/nea.controller");
+const controller = require("../controllers/client.controller");
 
-// Create methods
+// Create Methods
 router.post("/add", controller.add);
 router.post("/addList", controller.addList);
 
-// Read methods
+// Read Methods
 router.get("/findAll", controller.findAll);
 router.get("/find/:id", controller.find); // Standar find By Id method 
 
-// Update methods
-router.put("/update/:id", controller.update); // Standar update By Id method
+// Update Methods
+router.patch("/update/:id", controller.update); // Standar update By Id method
 
-// Delete methods
+// Delete Methods
 router.delete("/delete/:id", controller.delete); // Standar delte By Id method
 
 module.exports = router;

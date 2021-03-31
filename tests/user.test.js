@@ -1,6 +1,4 @@
-const { response } = require("express");
-const { report } = require("../routes/user.routes");
-const { api } = require("./helpers")
+const { api, createUser, getUser, getUsers } = require("./helpers")
 require("./jest.config");
 
 
@@ -16,12 +14,7 @@ const initState = [
 
 ]
 
-/**
- * Testing add users
-*/
-
 describe("/GET /api/users", () => {
-
 
     test('/findAll Users are returned as json', async () => {
 
@@ -46,18 +39,20 @@ describe("/GET /api/users", () => {
         expect(response.body).toHaveLength(expectedLenght);
     });
 
-    test("Find one should return the object", async () => {
+    test("find/:id should return the object", async () => {
 
         await api.post('/users/addList').send(initState)
 
         const response = await api.get('/users/findAll');
         const id = response.body[0]._id;
 
-        await api
+        const resp = await api
             .get(`/users/find/${id}`)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
+
+        expect(response.body[0]).toStrictEqual(resp.body)
 
     })
 
@@ -103,17 +98,15 @@ describe("/POST /api/users", () => {
             .send(user)
             .expect(400);
 
-        // REDUNTANTE (a medias)
-        const response = await api.get('/users/findAll');
+        const response = await getUsers();
 
         expect(response.body).toHaveLength(0);
 
     });
 
     test('Add a user list should be able to be added', async () => {
+
         //New mock users
-
-
         await api
             .post('/users/addList')
             .send(initState)
@@ -121,7 +114,7 @@ describe("/POST /api/users", () => {
             .expect('Content-Type', /json/)
             .expect(200);
 
-        const response = await api.get('/users/findAll');
+        const response = await getUsers();
 
         expect(response.body).toHaveLength(2);
     });
@@ -143,7 +136,7 @@ describe("/POST /api/users", () => {
             .send(users)
             .expect(400);
 
-        const response = await api.get('/users/findAll');
+        const response = await getUsers();
 
         expect(response.body).toHaveLength(0);
     });
@@ -154,30 +147,63 @@ describe("/PUT /api/users", () => {
 
     test("Already created users should be able to be updated", async () => {
 
-        const user = {
-            username: "Edgar",
-            password: "Test"
-        }
+        // Inits
+        const { id } = await createUser();
 
         const udpatedUser = {
-            username: "Edgar3"
+            username: "Edgar3",
+            age: 10
         }
-
-        const resp = await api.post('/users/add').send(user);
-
-
+        // Test to be passed
         await api
-            .put(`/update/${resp._id}`)
+            .put(`/users/update/${id}`)
             .send(udpatedUser)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200);
 
+        const response = await getUser(id);
+
+        expect(response.body).toMatchObject(udpatedUser);
     })
+
+    test("Empty update should leave the object intact", async () => {
+
+        const { user, id } = await createUser();
+
+        await api
+            .put(`/users/update/${id}`)
+            .send({})
+            .expect(200);
+
+        const response = await getUser(id);
+
+        expect(response.body).toStrictEqual(user);
+
+    })
+
 
 });
 
 describe("/DELETE /api/users", () => {
+
+
+    test("A users should be able to be deleted by their user Id", async () => {
+
+        const { id } = await createUser();
+
+        // First we check whether the response is good or not
+        await api
+            .delete(`/users/delete/${id}`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200);
+
+        // We double check if the
+        const response = await getUsers();
+
+        expect(response.body).toHaveLength(0);
+    });
 
 });
 
