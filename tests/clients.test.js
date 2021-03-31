@@ -8,6 +8,7 @@ describe("/POST /api/clients", () => {
 
     test('Clients list from CSV should be able to be added', async () => {
 
+        
         const jsonArray = await csv2json(clients, "client");
         
         await api

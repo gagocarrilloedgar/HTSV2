@@ -21,8 +21,6 @@ describe("/POST /api/phas", () => {
 
     });
 
-
-
 });
 
 
@@ -32,7 +30,7 @@ describe("/PUT /api/neas", () => {
 
         const jsonArray = [
             {
-                full_name:"test",
+                full_name: "test",
                 a: 1.078076432,
                 e: 0.827072914,
                 i: 22.81881892,
@@ -41,7 +39,7 @@ describe("/PUT /api/neas", () => {
                 ma: 8.160598893
             },
             {
-                full_name:"test_1",
+                full_name: "test_1",
                 a: 1.290033303,
                 e: 0.29927236,
                 i: 64.00479642,

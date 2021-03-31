@@ -11,7 +11,6 @@ const initState = [
         username: "Edgar2",
         password: "Test2"
     },
-
 ]
 
 describe("/GET /api/users", () => {
