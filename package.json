@@ -34,6 +34,7 @@
   "homepage": "https://github.com/gagocarrilloedgar/HTSV2#readme",
   "dependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
+    "add": "^2.0.6",
     "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
