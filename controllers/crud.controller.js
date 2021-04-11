@@ -14,6 +14,12 @@ exports.findAll = (Model) => catchAsync(async (req, res, next) => {
 
 });
 
+/**
+ * Finds an object and returns the data associated Using
+ * the _id property
+ * @param {*} Model MongoDB model
+ * @returns 
+ */
 exports.find = (Model) => catchAsync(async (req, res) => {
 
     const data = await Model.findById(req.params.id);
@@ -21,7 +27,11 @@ exports.find = (Model) => catchAsync(async (req, res) => {
 
 });
 
-
+/**
+ * Adds an object with the Model shchema to the MongoDB
+ * @param {*} Model MongoDB model
+ * @returns 
+ */
 exports.add = (Model) => catchAsync(async (req, res) => {
 
     const data = await Model.create(req.body);
@@ -29,7 +39,12 @@ exports.add = (Model) => catchAsync(async (req, res) => {
 
 });
 
-
+/**
+ * Adds a list to the MongoDB. It only acceps reduced amounts of data
+ * ToDo: implement a long data handler 
+ * @param {*} Model 
+ * @returns 
+ */
 exports.addList = (Model) => catchAsync(async (req, res) => {
 
     const datas = await Model.insertMany(req.body)
@@ -37,7 +52,11 @@ exports.addList = (Model) => catchAsync(async (req, res) => {
 
 });
 
-
+/**
+ * Finds and udates an object using the standar _id parameter
+ * @param {*} Model 
+ * @returns 
+ */
 exports.update = (Model) => catchAsync(async (req, res) => {
 
     const data = await Model.findOneAndUpdate({ _id: req.params.id }, req.body)
@@ -45,6 +64,12 @@ exports.update = (Model) => catchAsync(async (req, res) => {
 
 });
 
+
+/**
+ *  Finds and deletes an object using the standar _id parameter
+ * @param {*} Model 
+ * @returns 
+ */
 
 exports.delete = (Model) => catchAsync(async (req, res) => {
 

@@ -80,6 +80,9 @@ const sessionStore = MongoStore.create({
     mongoUrl: process.env.ATLAS_URI,
 });
 
+
+// This options need to be configured in order to be able to properly deploy and implement the API
+// whit a secure connection due the new google chrome and other browsers cookies policy.
 const cookieOptions = {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     secure: process.env.SECURE || true,
@@ -87,7 +90,7 @@ const cookieOptions = {
     sameSite: process.env.SAME_SITE || 'none'
 }
 
-
+// Session definition
 app.use(
     session({
         name: process.env.NAME,
@@ -102,6 +105,7 @@ app.use(
 // Import and addition of all the different API routes
 app.use("/", router);
 
+// Error handling routes/middlewares
 app.use(notFound);
 app.use(handleErrors);
 

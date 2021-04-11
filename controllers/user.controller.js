@@ -15,7 +15,7 @@ exports.update = crud.update(User)
 
 exports.delete = crud.delete(User)
 
-// ----------- Custom routes such --------
+// ----------- Custom routes (Login and register)--------
 
 
 

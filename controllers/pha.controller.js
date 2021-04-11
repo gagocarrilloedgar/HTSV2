@@ -20,8 +20,10 @@ exports.delete = crud.delete(PHA)
 // Custom routes 
 exports.propagateLatLong = catchAsync(async (req, res) => {
 
+    // First we retrieve all the PHA from the DB
     const phas = await PHA.find({ _id: { $in: req.body } });
 
+    // Runs a map and udpates their longitude and latitude
     phas.map(
         pha => {
             const pos = body2latlong(pha);

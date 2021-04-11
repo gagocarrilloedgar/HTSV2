@@ -47,7 +47,6 @@ exports.clearDatabase = async () => {
     }
 }
 
-
 const resp = process.env.NODE_ENV === "test"
     ? 1
     : 0;

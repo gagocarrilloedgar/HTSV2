@@ -1,5 +1,13 @@
 const csv = require('csvtojson');
 
+
+/**
+ * Returns a json array from the data provided by the csv file passed 
+ * @param {*} path  --> Path where the file is
+ * @param {*} selector --> Client/ Nea selector to decide the kind of parser 
+ * @returns 
+ */
+
 exports.csv2json = (path, selector) => {
 
     const numberParser = {

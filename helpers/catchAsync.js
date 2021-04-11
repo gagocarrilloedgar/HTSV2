@@ -1,6 +1,6 @@
 
 /**
- * 
+ * Wrapper that has a function fn as parameter an handles the error 
  * @param {*} fn 
  * @returns 
  */
@@ -10,3 +10,4 @@ module.exports = (fn) => {
         fn(req, res, next).catch((err) => next(err));
     };
 };
+
