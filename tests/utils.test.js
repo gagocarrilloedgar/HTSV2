@@ -1,12 +1,9 @@
-const { computeHostpot } = require("../helpers/computeHostpot");
+const { computeHostpot } = require("../helpers/computeHostpot")
 const { computePrice } = require("../helpers/computePrice")
 
-
-
 describe("Compute ensurance policy price", () => {
-
     test("If empty person should return Error", () => {
-        const resp = computePrice();
+        const resp = computePrice()
 
         expect(resp).toBe(TypeError)
     })
@@ -17,23 +14,19 @@ describe("Compute ensurance policy price", () => {
             hostpot_asteroids: 0
         }
 
-        const resp = computePrice(client);
+        const resp = computePrice(client)
         expect(resp).toBe(170)
     })
-
 })
-
-
 
 describe("Compute hostpots", () => {
     test("If no entries should return Error", () => {
-        const resp = computeHostpot();
+        const resp = computeHostpot()
 
         expect(resp).toBe(TypeError)
     })
 
     test("Given (0,0) user and (1,1) pha for should return true", () => {
-
         client = {
             lat: 0,
             long: 0,
@@ -46,14 +39,12 @@ describe("Compute hostpots", () => {
             }
         }
 
-        const resp = computeHostpot(pha, client);
+        const resp = computeHostpot(pha, client)
 
         expect(resp).toBe(true)
-
     })
 
     test("Given (0,0) user and (4,4) pha for should return false", () => {
-
         client = {
             lat: 0,
             long: 0,
@@ -66,11 +57,8 @@ describe("Compute hostpots", () => {
             }
         }
 
-        const resp = computeHostpot(pha, client);
+        const resp = computeHostpot(pha, client)
 
         expect(resp).toBe(false)
-
     })
 })
-
-
