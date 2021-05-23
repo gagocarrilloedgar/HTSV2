@@ -1,32 +1,24 @@
-const { csv2json } = require("../helpers/csv2json");
-const { api } = require("./helpers");
-const pha = "assets/pha.csv";
+const { csv2json } = require("../helpers/csv2json")
+const { api } = require("./helpers")
+const pha = "assets/pha.csv"
 
-
-require("./jest.config");
+require("./jest.config")
 
 describe("/POST /api/phas", () => {
-
     test('PHA list from CSV should be able to be added', async () => {
-
-        const jsonArray = await csv2json(pha);
-        //New mock users
+        const jsonArray = await csv2json(pha)
+        // New mock users
         await api
             .post(`/phas/addList`)
             .send(jsonArray)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(200);
-
-    });
-
-});
-
+            .expect(200)
+    })
+})
 
 describe("/PUT /api/neas", () => {
-
     test('Phas location are not 0', async () => {
-
         const jsonArray = [
             {
                 full_name: "test",
@@ -48,23 +40,18 @@ describe("/PUT /api/neas", () => {
             }
         ]
 
-        await api.post(`/phas/addList`).send(jsonArray);
+        await api.post(`/phas/addList`).send(jsonArray)
 
-        const response = await api.get('/phas/findAll');
+        const response = await api.get('/phas/findAll')
 
         await api
             .put("/phas/propagateLatLong")
             .send(response.body)
-            .expect(200);
+            .expect(200)
 
-
-        const resp = await api.get('/phas/findAll');
+        const resp = await api.get('/phas/findAll')
 
         expect(resp.body[0].location.lat).toEqual(expect.any(Number))
         expect(resp.body).not.toEqual(response.body)
-
-    });
-
-
-});
-
+    })
+})

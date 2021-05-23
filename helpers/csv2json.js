@@ -1,21 +1,19 @@
-const csv = require('csvtojson');
-
+const csv = require('csvtojson')
 
 /**
- * Returns a json array from the data provided by the csv file passed 
+ * Returns a json array from the data provided by the csv file passed
  * @param {*} path  --> Path where the file is
- * @param {*} selector --> Client/ Nea selector to decide the kind of parser 
- * @returns 
+ * @param {*} selector --> Client/ Nea selector to decide the kind of parser
+ * @returns
  */
 
 exports.csv2json = (path, selector) => {
-
     const numberParser = {
         flat: true,
-        cellParser: "number" // string or a function 
+        cellParser: "number" // string or a function
     }
 
-    let parserOptions = {};
+    let parserOptions = {}
 
     switch (selector) {
         case "client":
@@ -24,7 +22,7 @@ exports.csv2json = (path, selector) => {
                 "long": numberParser,
                 "lat": numberParser,
             }
-            break;
+            break
 
         default:
             parserOptions = {
@@ -37,11 +35,10 @@ exports.csv2json = (path, selector) => {
                     "ma": numberParser,
                 }
             }
-            break;
+            break
     }
 
     const jsonArray = csv(parserOptions).fromFile(path).then(res => { return res })
 
-    return jsonArray;
-
+    return jsonArray
 }
